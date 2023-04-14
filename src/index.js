@@ -20,18 +20,18 @@ app.listen(PORT, () => {
 //----------- Meu código começa a partir daqui ----------------//
 
 async function getTalkers() {
-  const arrayTalker = path.resolve(__dirname,'talker.json');
+  const arrayTalker = path.resolve(__dirname, 'talker.json');
   console.log(arrayTalker);
   try {
     const readTalker = await fs.readFile(arrayTalker, 'utf-8');
     const talkers = JSON.parse(readTalker);
     console.log(talkers);
     return talkers;
-  }
-  catch(error) {
+  } catch (error) {
     return [];
   }
-}
+};
+
 getTalkers();
 
 app.get('/talker', async (req, res) => {
