@@ -17,7 +17,7 @@ app.listen(PORT, () => {
   console.log('Online');
 });
 
-//----------- Meu código começa a partir daqui ----------------//
+// -----------Meu código começa a partir daqui----------------
 
 async function getTalkers() {
   const arrayTalker = path.resolve(__dirname, 'talker.json');
@@ -30,7 +30,7 @@ async function getTalkers() {
   } catch (error) {
     return [];
   }
-};
+}
 
 getTalkers();
 
