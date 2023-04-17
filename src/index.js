@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
+const crypto = require('crypto');
 
 const app = express();
 app.use(express.json());
@@ -18,6 +19,10 @@ app.listen(PORT, () => {
 });
 
 // -----------Meu código começa a partir daqui----------------
+ function generateToken() {
+  const token = crypto.randomBytes(8).toString('hex');
+  return token;
+ } 
 
 async function getTalkers() {
   const arrayTalker = path.resolve(__dirname, 'talker.json');
@@ -56,3 +61,13 @@ app.get('/talker/:id', async (req, res) => {
     console.error(error);
   }
   });
+
+  app.post('/login', async (req, res) => {
+      const { email, password } = req.body;
+
+      if (!email && !password) {
+        return res.status(401).send({ message: '401 Unauthorized' });
+      }
+      const token = generateToken();
+      return res.status(200).json({ token });
+  }); 
