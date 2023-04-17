@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
 const crypto = require('crypto');
+const validateLogin = require('./middlewares/validateLogin');
 
 const app = express();
 app.use(express.json());
@@ -62,12 +63,21 @@ app.get('/talker/:id', async (req, res) => {
   }
   });
 
-  app.post('/login', async (req, res) => {
-      const { email, password } = req.body;
+// app.post('/login', async (req, res) => {
+//   const { email, password } = req.body;
 
-      if (!email && !password) {
-        return res.status(401).send({ message: '401 Unauthorized' });
-      }
-      const token = generateToken();
-      return res.status(200).json({ token });
-  }); 
+//   if (!email && !password) {
+//     return res.status(401).send({ message: '401 Unauthorized' });
+//   }
+//   const token = generateToken();
+//   return res.status(200).json({ token });
+//   }); 
+
+app.post('/login', validateLogin, (_req, res) => {
+  try {
+    const token = generateToken();
+    return res.status(200).json({ token });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+});
