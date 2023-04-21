@@ -3,9 +3,16 @@ const fs = require('fs').promises;
 const path = require('path');
 const crypto = require('crypto');
 const validateLogin = require('./middlewares/validateLogin');
+const validateName = require('./middlewares/validateName');
+const validateToken = require('./middlewares/validateToken');
+const validateAge = require('./middlewares/validateAge');
+const { validateTalk, validateWatchedAt, validateRate } = require('./middlewares/validateTalk');
+const talker = require('./talker.json');
 
 const app = express();
 app.use(express.json());
+
+const talkerPath = path.resolve(__dirname, './talker.json');
 
 const HTTP_OK_STATUS = 200;
 const PORT = process.env.PORT || '3001';
@@ -20,10 +27,10 @@ app.listen(PORT, () => {
 });
 
 // -----------Meu código começa a partir daqui----------------
- function generateToken() {
+function generateToken() {
   const token = crypto.randomBytes(8).toString('hex');
   return token;
- } 
+ }
 
 async function getTalkers() {
   const arrayTalker = path.resolve(__dirname, 'talker.json');
@@ -38,9 +45,7 @@ async function getTalkers() {
   }
 }
 
-getTalkers();
-
-app.get('/talker', async (req, res) => {
+app.get('/talker', async (_req, res) => {
   try {
     const talkers2 = await getTalkers();
     res.status(200).json(talkers2);
@@ -80,4 +85,14 @@ app.post('/login', validateLogin, (_req, res) => {
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
+});
+
+app.post('/talker', validateToken, validateName, validateAge,
+  validateTalk, validateWatchedAt, validateRate, async (req, res) => {
+    const newTalker = { id: talker.length + 1, ...req.body };
+    // talker.push(newTalker);
+    const allTalkers = JSON.stringify([...talker, newTalker]);
+    await fs.writeFile(talkerPath, allTalkers);
+    // console.log(allTalkers);
+    return res.status(201).json(newTalker);
 });
