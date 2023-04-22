@@ -47,26 +47,6 @@ async function getTalkers() {
   }
 }
 
-// funcão proximo id
-const postLastId = async () => {
-  const arrayPosts = await getTalkers();
-  // console.log(arrayPosts[0]);
-  return arrayPosts[0];
-};
-
-// função que adiciona uma nova pessosa palestrante
-// const insertTalk = async (post) => {
-//   try {
-//     const arrayPosts = await getTalkers();
-//     arrayPosts.push(post);
-//     arrayPosts[0] += 1;
-
-//     return await fs.writeFile(talkerPath, JSON.stringify(arrayPosts));
-//   } catch (error) {
-//     return null;
-//   }
-// };
-
 // retorna um array com todas as pessoas palestrantes cadastradas
 app.get('/talker', async (_req, res) => {
   try {
