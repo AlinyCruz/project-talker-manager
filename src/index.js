@@ -7,7 +7,8 @@ const validateName = require('./middlewares/validateName');
 const validateToken = require('./middlewares/validateToken');
 const validateAge = require('./middlewares/validateAge');
 const { validateTalk, validateWatchedAt, validateRate } = require('./middlewares/validateTalk');
-const talker = require('./talker.json');
+// const talker = require('./talker.json');
+// const writeFile = require('fs/promises');
 
 const app = express();
 app.use(express.json());
@@ -27,24 +28,46 @@ app.listen(PORT, () => {
 });
 
 // -----------Meu código começa a partir daqui----------------
+
+// função que gera o token
 function generateToken() {
   const token = crypto.randomBytes(8).toString('hex');
   return token;
  }
 
+// função que lê o arquivo talker.json
 async function getTalkers() {
   const arrayTalker = path.resolve(__dirname, 'talker.json');
-  console.log(arrayTalker);
   try {
     const readTalker = await fs.readFile(arrayTalker, 'utf-8');
     const talkers = JSON.parse(readTalker);
-    console.log(talkers);
     return talkers;
   } catch (error) {
     return [];
   }
 }
 
+// funcão proximo id
+const postLastId = async () => {
+  const arrayPosts = await getTalkers();
+  // console.log(arrayPosts[0]);
+  return arrayPosts[0];
+};
+
+// função que adiciona uma nova pessosa palestrante
+// const insertTalk = async (post) => {
+//   try {
+//     const arrayPosts = await getTalkers();
+//     arrayPosts.push(post);
+//     arrayPosts[0] += 1;
+
+//     return await fs.writeFile(talkerPath, JSON.stringify(arrayPosts));
+//   } catch (error) {
+//     return null;
+//   }
+// };
+
+// retorna um array com todas as pessoas palestrantes cadastradas
 app.get('/talker', async (_req, res) => {
   try {
     const talkers2 = await getTalkers();
@@ -54,6 +77,7 @@ app.get('/talker', async (_req, res) => {
   }
 });
 
+// retorna uma pessoa palestrante com base no id da rota
 app.get('/talker/:id', async (req, res) => {
   try {
     const talkers2 = await getTalkers();
@@ -68,16 +92,7 @@ app.get('/talker/:id', async (req, res) => {
   }
   });
 
-// app.post('/login', async (req, res) => {
-//   const { email, password } = req.body;
-
-//   if (!email && !password) {
-//     return res.status(401).send({ message: '401 Unauthorized' });
-//   }
-//   const token = generateToken();
-//   return res.status(200).json({ token });
-//   }); 
-
+// retorna um token aleatório de 16 caracteres
 app.post('/login', validateLogin, (_req, res) => {
   try {
     const token = generateToken();
@@ -87,16 +102,24 @@ app.post('/login', validateLogin, (_req, res) => {
   }
 });
 
+// adiciona uma nova pessoa palestrante ao seu arquivo
 app.post('/talker', validateToken, validateName, validateAge,
   validateTalk, validateWatchedAt, validateRate, async (req, res) => {
-    const newTalker = { id: talker.length + 1, ...req.body };
-    // talker.push(newTalker);
-    const allTalkers = JSON.stringify([...talker, newTalker]);
-    await fs.writeFile(talkerPath, allTalkers);
-    // console.log(allTalkers);
+    const { name, age, talk } = req.body;
+    const readTalk = await getTalkers();
+    const id = readTalk[readTalk.length - 1].id + 1;
+    // console.log(id);
+   
+    const newTalker = { id, name, age, talk };
+    const readNewTalker = JSON.stringify([...readTalk, newTalker]);
+
+    console.log(newTalker);
+
+    await fs.writeFile(talkerPath, readNewTalker);
     return res.status(201).json(newTalker);
 });
 
+// edita uma pessoa palestrante com base no id da rota
 app.put('/talker/:id', validateToken, validateName, validateAge,
 validateTalk, validateWatchedAt, validateRate, async (req, res) => {
   const { id } = req.params;
@@ -111,4 +134,15 @@ validateTalk, validateWatchedAt, validateRate, async (req, res) => {
  }
  await fs.writeFile(talkerPath, JSON.stringify(readTalk));
  return res.status(200).json({ name, age, talk, id: Number(id) });
+});
+
+// deleta uma pessoa palestrante com base no id da rota
+app.delete('/talker/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  
+  const readTalk = await getTalkers();
+  const idTalk = readTalk.findIndex((t) => t.id !== Number(id));
+
+  fs.writeFile(talkerPath, JSON.stringify(idTalk));
+ return res.status(204).end();
 });

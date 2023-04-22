@@ -1,3 +1,4 @@
+// valida o campo login: email e senha
 const validateLogin = (req, res, next) => {
   const { email, password } = req.body;
   const emailFormat = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;

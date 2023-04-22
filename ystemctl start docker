@@ -1,0 +1,32 @@
+[0;1;32m●[0m docker.service - Docker Application Container Engine
+     Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)
+     Active: [0;1;32mactive (running)[0m since Sat 2023-04-22 09:19:42 -03; 11min ago
+TriggeredBy: [0;1;32m●[0m docker.socket
+       Docs: https://docs.docker.com
+   Main PID: 1586 (dockerd)
+      Tasks: 94
+     Memory: 96.1M
+        CPU: 3.552s
+     CGroup: /system.slice/docker.service
+             ├─1586 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+             ├─2452 /usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port 33060 -container-ip 172.21.0.2 -container-port 3306
+             ├─2453 /usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port 3306 -container-ip 172.19.0.2 -container-port 3306
+             ├─2466 /usr/bin/docker-proxy -proto tcp -host-ip :: -host-port 33060 -container-ip 172.21.0.2 -container-port 3306
+             ├─2477 /usr/bin/docker-proxy -proto tcp -host-ip :: -host-port 3306 -container-ip 172.19.0.2 -container-port 3306
+             ├─2510 /usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port 3000 -container-ip 172.21.0.3 -container-port 3000
+             ├─2516 /usr/bin/docker-proxy -proto tcp -host-ip :: -host-port 3000 -container-ip 172.21.0.3 -container-port 3000
+             ├─2530 /usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port 9229 -container-ip 172.22.0.3 -container-port 9229
+             ├─2536 /usr/bin/docker-proxy -proto tcp -host-ip :: -host-port 9229 -container-ip 172.22.0.3 -container-port 9229
+             ├─2554 /usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port 3001 -container-ip 172.22.0.3 -container-port 3001
+             └─2560 /usr/bin/docker-proxy -proto tcp -host-ip :: -host-port 3001 -container-ip 172.22.0.3 -container-port 3001
+
+abr 22 09:19:37 aliny-cruz dockerd[1586]: time="2023-04-22T09:19:37.775454421-03:00" level=error msg="cd05167271f15d7a5b4e192400b45efd0d01ebaeac13632bb00e6cb4421a7744 cleanup: failed to delete container from containerd: no such container"
+abr 22 09:19:37 aliny-cruz dockerd[1586]: time="2023-04-22T09:19:37.775505428-03:00" level=error msg="failed to start container" container=cd05167271f15d7a5b4e192400b45efd0d01ebaeac13632bb00e6cb4421a7744 error="driver failed programming external connectivity on endpoint talker_manager_db (b1bc0036de8450584f21e590209ab324777154f2d67d99c1f2a235d1f7e5e915): Bind for 0.0.0.0:3306 failed: port is already allocated"
+abr 22 09:19:37 aliny-cruz dockerd[1586]: time="2023-04-22T09:19:37.780093419-03:00" level=error msg="d664ed1d041eb108cb8770e6db116b23dd83d42fa9dedecd25b7024c92bcec0c cleanup: failed to delete container from containerd: no such container"
+abr 22 09:19:37 aliny-cruz dockerd[1586]: time="2023-04-22T09:19:37.780144061-03:00" level=error msg="failed to start container" container=d664ed1d041eb108cb8770e6db116b23dd83d42fa9dedecd25b7024c92bcec0c error="driver failed programming external connectivity on endpoint all_for_one_db (821cea37cafc4f28a0b83f8ed4c89190b8ef8b37cee5c8535d19e1ef7eeebc28): Bind for 0.0.0.0:3306 failed: port is already allocated"
+abr 22 09:19:39 aliny-cruz dockerd[1586]: time="2023-04-22T09:19:39.787969329-03:00" level=info msg="Loading containers: done."
+abr 22 09:19:41 aliny-cruz dockerd[1586]: time="2023-04-22T09:19:41.169847891-03:00" level=info msg="Docker daemon" commit=cbce331 graphdriver=overlay2 version=23.0.4
+abr 22 09:19:41 aliny-cruz dockerd[1586]: time="2023-04-22T09:19:41.170352949-03:00" level=info msg="Daemon has completed initialization"
+abr 22 09:19:42 aliny-cruz dockerd[1586]: time="2023-04-22T09:19:42.012717165-03:00" level=info msg="[core] [Server #7] Server created" module=grpc
+abr 22 09:19:42 aliny-cruz systemd[1]: Started Docker Application Container Engine.
+abr 22 09:19:42 aliny-cruz dockerd[1586]: time="2023-04-22T09:19:42.058358394-03:00" level=info msg="API listen on /run/docker.sock"

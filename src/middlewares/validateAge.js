@@ -1,3 +1,4 @@
+// valida o campo idade
 const validateAge = (req, res, next) => {
   const { age } = req.body;
   

@@ -1,3 +1,4 @@
+// valida se o token é válido
 const validateToken = (req, res, next) => {
   const { authorization } = req.headers;
   

@@ -1,3 +1,4 @@
+// valida o campo talk
 const validateTalk = (req, res, next) => {
   const { talk } = req.body;
   
@@ -7,6 +8,7 @@ const validateTalk = (req, res, next) => {
   return next();
 };
 
+// valida o campo watchedAt
 const validateWatchedAt = (req, res, next) => {
   const { watchedAt } = req.body.talk;
   const dataFormat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
@@ -21,6 +23,7 @@ const validateWatchedAt = (req, res, next) => {
   return next();
 };
 
+// valida o campo rate
 const validateRate = (req, res, next) => {
   const { rate } = req.body.talk;
   if (rate === undefined) {
